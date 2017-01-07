@@ -1,1 +1,3 @@
-# gary-muthafuckin-oak
+# pokemon
+
+Pokémon battle simulation
