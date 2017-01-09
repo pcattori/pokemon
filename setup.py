@@ -9,8 +9,7 @@ setup(
     author_email='pcattori@gmail.com',
     packages=['pokemon', 'fetch'],
     package_dir={'pokemon': 'pokemon'},
-    package_data={
-        'pokemon': ['data/species.json']},
+    package_data={'pokemon': ['data/*.json']},
     extras_require={'fetch': [
         'beautifulsoup4==4.5.1',
         'requests==2.12.4']}
