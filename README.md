@@ -1,9 +1,6 @@
-Only models 1st Generation
+# pokemon
 
-# pokemon-battle
+Python API for 1st Generation Pokédex and Battle Simulation
 
-Pokémon battle simulation
+![pokemon-starters](assets/pokemon-starters.png)
 
-# pokedex
-
-Pokémon species lookup
