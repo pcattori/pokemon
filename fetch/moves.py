@@ -20,5 +20,7 @@ for move_soup in moves_soup:
     power = int_or_None(move_details[3].string.lower())
     accuracy = int_or_None(move_details[4].string.lower())
     pp = int_or_None(move_details[5].string.lower())
-    move = Move(name, type_, category, power, accuracy, pp)
-    print(json.dumps(move._asdict()))
+    move = {
+        'name': name, 'type': type_, 'category': category, 'power': power,
+        'accuracy': accuracy, 'pp': pp}
+    print(json.dumps(move))
