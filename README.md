@@ -2,7 +2,20 @@
 
 Python Pokémon API : 1st Generation Pokédex and Battle Simulation
 
+:zap: Batteries included: Comes bundled with JSON data for 1st Generation
+
 ![pokemon-starters](assets/pokemon-starters.png)
+
+## Install
+
+```sh
+$ git clone https://github.com/pcattori/pokemon.git
+$ cd pokemon
+$ pip install -e . # .[fetch] for scraping capabilities
+```
+
+If you don't want to rely on the built-in JSON data or want data scraping
+capabilities, do `pip install -e .[fetch]` instead.
 
 ## Pokédex
 
