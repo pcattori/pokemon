@@ -43,11 +43,6 @@ class Pokemon:
         self.moves = moves
         # TODO status condition
 
-    @staticmethod
-    def of_species(species_name, **kwargs):
-        species = pokedex.POKEDEX.by_name(species_name)
-        return Pokemon(species, **kwargs)
-
     @property
     def stats(self):
         if self._stats is None:
