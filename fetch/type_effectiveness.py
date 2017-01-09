@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import collections
 import json
 import requests
+import pokemon
 
 effectiveness_to_number = {None: 1, '2': 2, '½': .5, '0': 0}
 
@@ -23,6 +24,6 @@ for type_row in type_rows[:-3]: # ignore new type rows
         if attack == 'ice' and defend == 'fire':
             effectiveness = 1
 
-        type_effectiveness = TypeEffectiveness(attack, defend, effectiveness)
+        type_effectiveness = pokemon.TypeEffectiveness(attack, defend, effectiveness)
         print(json.dumps(type_effectiveness._asdict()))
 
