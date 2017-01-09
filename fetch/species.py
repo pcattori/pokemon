@@ -46,12 +46,11 @@ for species_link in species_links:
     del base_stats['sp.atk']
     del base_stats['sp.def']
 
-    # TODO camelCase names since it will be JSON?
     species = {
         'national_pokedex_number': number,
         'name': name,
         'types': types,
-        'base_stats': base_stats}
+        'baseStats': base_stats}
     print(json.dumps(species, ensure_ascii=False), flush=True)
 
 
