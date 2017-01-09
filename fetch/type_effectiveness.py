@@ -12,7 +12,8 @@ for type_row in type_rows[:-3]: # ignore new type rows
     for type_cell in type_row.find_all('td')[:-3]: # ignore new type columns
         attack, _, defend = type_cell['title'].lower().split()[:3]
         effectiveness = effectiveness_to_number[type_cell.string]
-        # http://pokemondb.net/type
+
+        # generation 1 fixes
         if attack == 'ghost' and defend == 'psychic':
             # TODO Note that this only affected Lick as Confuse Ray and
             # Night Shade affected all Pokémon equally.
@@ -21,6 +22,7 @@ for type_row in type_rows[:-3]: # ignore new type rows
             effectiveness = 2
         if attack == 'ice' and defend == 'fire':
             effectiveness = 1
+
         type_effectiveness = TypeEffectiveness(attack, defend, effectiveness)
         print(json.dumps(type_effectiveness._asdict()))
 
