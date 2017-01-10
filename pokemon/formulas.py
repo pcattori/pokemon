@@ -1,8 +1,12 @@
+import collections
 import json
 import math
 import pkg_resources
 import pokemon.core as pokemon
 import random
+
+Damage = collections.namedtuple('Damage', [
+    'damage', 'luck', 'critical_hit', 'effectiveness'])
 
 def _load_type_effectivenesses():
     type_effectiveness_json = pkg_resources.resource_filename(
@@ -40,6 +44,8 @@ def stat_calc(base, iv, ev, level):
 
 def damage(pokemon, move, opponent):
     '''http://bulbapedia.bulbagarden.net/wiki/Damage#Damage_formula'''
+    # TODO allow for critical, luck injection?
+
     # Same Type Attack Bonus (STAB)
     stab = 1
     if move.type_ in pokemon.species.types:
@@ -56,7 +62,8 @@ def damage(pokemon, move, opponent):
         critical = 2
 
     # modifier without `other` for 1st generation
-    modifier = stab * type_effectiveness * critical * random.uniform(0.85, 1)
+    luck = random.uniform(0.85, 1)
+    modifier = stab * type_effectiveness * critical * luck
 
     # level
     level = pokemon.level
@@ -69,7 +76,6 @@ def damage(pokemon, move, opponent):
         attack = pokemon.stats.special
         defense = opponent.stats.special
     else:
-        print(move.category)
         return None
 
     # base power
@@ -77,4 +83,6 @@ def damage(pokemon, move, opponent):
 
     dmg = math.floor((((2 * level + 10) / 250) * (attack / defense) * base + 2) * modifier)
     # TODO effectiveness and critical messages
-    return dmg, critical > 1, type_effectiveness
+    return Damage(
+        damage=dmg, luck=luck, critical_hit=critical == 2,
+        effectiveness=type_effectiveness)
