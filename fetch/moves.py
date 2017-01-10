@@ -3,6 +3,8 @@ import collections
 import json
 import requests
 
+# TODO detect high critical hit ratio
+
 def int_or_None(string):
     try:
         return int(string)
