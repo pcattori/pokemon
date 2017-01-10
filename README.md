@@ -2,9 +2,13 @@
 
 Python Pokémon API : 1st Generation Pokédex and Battle Simulation
 
-:zap: Batteries included: Comes bundled with JSON data for 1st Generation
 
 ![pokemon-starters](assets/pokemon-starters.png)
+
+:zap: Batteries included: Comes bundled with JSON data for 1st Generation
+- [Pokémon Species](pokemon/data/species.json)
+- [Moves](pokemon/data/moves.json)
+- [Type Chart](pokemon/data/type_effectiveness.json)
 
 ## Install
 
