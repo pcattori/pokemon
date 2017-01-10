@@ -3,7 +3,7 @@ import pokemon.formulas as formulas
 import pokemon.pokedex as pokedex
 
 class Pokemon:
-    def __init__(self, species, level, moves={}, ivs=None, evs=None):
+    def __init__(self, species, level, moves=[], ivs=None, evs=None):
         self.species = species
         self.level = level
 
@@ -12,7 +12,7 @@ class Pokemon:
 
         self._stats = None
         self.hp = self.stats.hp # start at full hp
-        self.moves = moves
+        self.moves = {move.name: move for move in moves}
         # TODO status condition
 
     @property
