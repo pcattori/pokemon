@@ -24,8 +24,8 @@ capabilities, do `pip install -e .[fetch]` instead.
 ## Pokédex
 
 ```python
-import pokemon
-charmander = pokemon.Pokemon(pokemon.species('charmander'), level=3, moves=[
+>>> import pokemon
+>>> charmander = pokemon.Pokemon(pokemon.species('charmander'), level=3, moves=[
     pokemon.move(move) for move in ('scratch', 'growl', 'ember', 'leer')])
 >>> charmander.species
 Species(national_pokedex_number=4, name='charmander', types=['fire'], base_stats=Stats(hp=39, attack=52, defense=43, special=50, speed=65))
@@ -39,12 +39,16 @@ Stats(hp=0, attack=0, defense=0, special=0, speed=0)
 Stats(hp=15, attack=8, defense=7, special=8, speed=9)
 >>> charmander.moves
 [Move(name='scratch', type_='normal', category='physical', power=40, accuracy=100, pp=35), Move(name='growl', type_='normal', category='status', power=None, accuracy=100, pp=40), Move(name='ember', type_='fire', category='special', power=40, accuracy=100, pp=25), Move(name='leer', type_='normal', category='status', power=None, accuracy=100, pp=30)]
+```
+
+## Battle Simulation
+
+```python
+>>> import pokemon
+>>> charmander = pokemon.Pokemon(pokemon.species('charmander'), level=3, moves=[
+    pokemon.move(move) for move in ('scratch', 'growl', 'ember', 'leer')])
 >>> squirtle = pokemon.Pokemon(pokemon.species('squirtle'), level=3, moves=[
     pokemon.move(move) for move in ('tackle', 'tail whip', 'bubble', 'water gun')])
 >>> pokemon.formulas.damage(squirtle, squirtle.moves[2], charmander)
 Damage(damage=27, luck=0.9927695832242377, critical_hit=True, effectiveness=2) # non-deterministic, so your results may vary
 ```
-
-## Battle Simulation
-
-NOT YET IMPLEMENTED
