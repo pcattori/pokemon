@@ -38,7 +38,7 @@ Stats(hp=0, attack=0, defense=0, special=0, speed=0)
 >>> charmander.stats # dynamically calculated from base stats, ivs, and evs
 Stats(hp=15, attack=8, defense=7, special=8, speed=9)
 >>> charmander.moves
-[Move(name='scratch', type_='normal', category='physical', power=40, accuracy=100, pp=35), Move(name='growl', type_='normal', category='status', power=None, accuracy=100, pp=40), Move(name='ember', type_='fire', category='special', power=40, accuracy=100, pp=25), Move(name='leer', type_='normal', category='status', power=None, accuracy=100, pp=30)]
+{'scratch': Move(name='scratch', type_='normal', category='physical', power=40, accuracy=100, pp=35), 'growl': Move(name='growl', type_='normal', category='status', power=None, accuracy=100, pp=40), 'ember': Move(name='ember', type_='fire', category='special', power=40, accuracy=100, pp=25), 'leer': Move(name='leer', type_='normal', category='status', power=None, accuracy=100, pp=30)}
 ```
 
 ## Battle Simulation
@@ -49,6 +49,6 @@ Stats(hp=15, attack=8, defense=7, special=8, speed=9)
     pokemon.move(move) for move in ('scratch', 'growl', 'ember', 'leer')])
 >>> squirtle = pokemon.Pokemon(pokemon.species('squirtle'), level=3, moves=[
     pokemon.move(move) for move in ('tackle', 'tail whip', 'bubble', 'water gun')])
->>> pokemon.formulas.damage(squirtle, squirtle.moves[2], charmander)
+>>> pokemon.formulas.damage(squirtle, squirtle.moves['bubble'], charmander)
 Damage(damage=27, luck=0.9927695832242377, critical_hit=True, effectiveness=2) # non-deterministic, so your results may vary
 ```
