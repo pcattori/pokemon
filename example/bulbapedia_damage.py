@@ -1,6 +1,8 @@
 import pokemon
 # taken from http://bulbapedia.bulbagarden.net/wiki/Damage#Example
-# NOTE: this is a generation 1 library, so critical hits deal 2x damage, not 1.5x
+# NOTE: this is a generation 1 library so:
+# - critical hits deal 2x damage, not 1.5x
+# - we will have to manually create Pokemon and Moves that are not gen1 (see example/damage.py for how to leverage built-in Pokemon and moves)
 # NOTE: some values are generated randomly so your results may vary a bit
 
 # first let's make ice_fang since its not a built-in (read: not gen1) move
