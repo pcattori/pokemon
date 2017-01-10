@@ -15,7 +15,7 @@ glaceon = pokemon.Pokemon(
         national_pokedex_number=471, name='glaceon', types=['ice'],
         base_stats=pokemon.Stats(
             hp=65, attack=60, defense=110, special=130, speed=65)),
-    level=75, moves=[ice_fang])
+    level=75, moves={ice_fang.name: ice_fang})
 
 # hard-code stats as given in the example on bulbapedia
 glaceon._stats = pokemon.Stats(
@@ -30,7 +30,7 @@ garchomp = pokemon.Pokemon(
         national_pokedex_number=445, name='garchomp', types=['dragon', 'ground'],
         base_stats=pokemon.Stats(
             hp=108, attack=130, defense=95, special=85, speed=102)),
-        level=78, moves=[])
+        level=78, moves={})
 
 # again, hard-code stats to match example given by bulbapedia
 garchomp._stats = pokemon.Stats(
@@ -40,7 +40,7 @@ print('garchomp stats', garchomp.stats)
 # example: prints => garchomp stats Stats(hp=270, attack=210, defense=163, special=156, speed=176)
 
 # do some damage!
-dmg = pokemon.formulas.damage(glaceon, ice_fang, garchomp)
+dmg = pokemon.formulas.damage(glaceon, glaceon.moves['ice fang'], garchomp)
 print(dmg)
 # example: prints => Damage(damage=180, luck=0.8999687147313562, critical_hit=False, effectiveness=4)
 

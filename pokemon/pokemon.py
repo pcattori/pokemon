@@ -3,7 +3,7 @@ import pokemon.formulas as formulas
 import pokemon.pokedex as pokedex
 
 class Pokemon:
-    def __init__(self, species, level, moves, ivs=None, evs=None):
+    def __init__(self, species, level, moves={}, ivs=None, evs=None):
         self.species = species
         self.level = level
 
