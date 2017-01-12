@@ -7,7 +7,7 @@ Species = collections.namedtuple('Species', [
     'national_pokedex_number', 'name', 'types', 'base_stats'])
 
 Move = collections.namedtuple('Move', [
-    'name', 'type_', 'category', 'power', 'accuracy', 'pp'])
+    'name', 'type_', 'category', 'power', 'accuracy', 'max_pp'])
 
 TypeEffectiveness = collections.namedtuple('TypeEffectiveness', [
     'attack', 'defend', 'effectiveness'])

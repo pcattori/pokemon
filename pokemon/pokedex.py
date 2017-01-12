@@ -17,6 +17,7 @@ def _load_moves():
         for line in f:
             move = json.loads(line)
             move['type_'] = move.pop('type')
+            move['max_pp'] = move.pop('pp')
             yield pokemon.Move(**move)
 
 class Pokedex(collections.Sequence):

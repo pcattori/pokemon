@@ -7,7 +7,8 @@ import pokemon
 
 # first let's make ice_fang since its not a built-in (read: not gen1) move
 ice_fang = pokemon.Move(
-    name='ice fang', type_='ice', category='physical', power=65, accuracy=.65, pp=15)
+    name='ice fang', type_='ice', category='physical',
+    power=65, accuracy=.65, max_pp=15)
 
 # similarily, we will have to make glaceon since its not gen1
 glaceon = pokemon.Pokemon(
