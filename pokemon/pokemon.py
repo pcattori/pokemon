@@ -2,6 +2,16 @@ import pokemon.core as pokemon
 import pokemon.formulas as formulas
 import pokemon.pokedex as pokedex
 
+class DepletableMove:
+    def __init__(self, move, pp=None):
+        self.move = move
+        if pp is None:
+            pp = move.max_pp
+        self.pp = pp
+
+    def __getattr__(self, attr):
+        return getattr(self.move, attr)
+
 class Pokemon:
     def __init__(self, species, level, moves=[], ivs=None, evs=None):
         self.species = species
@@ -12,7 +22,9 @@ class Pokemon:
 
         self._stats = None
         self.hp = self.stats.hp # start at full hp
-        self.moves = {move.name: move for move in moves}
+        self.moves = {
+            move.name: DepletableMove(move)
+            for move in moves}
         # TODO status condition
 
     @property
