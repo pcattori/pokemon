@@ -13,8 +13,9 @@ class DepletableMove:
         return getattr(self.move, attr)
 
 class Pokemon:
-    def __init__(self, species, level, moves=[], ivs=None, evs=None):
+    def __init__(self, species, level, moves=[], ivs=None, evs=None, nickname=None):
         self.species = species
+        self.nickname = nickname
         self.level = level
 
         self.ivs = ivs or formulas.random_ivs()
@@ -26,6 +27,10 @@ class Pokemon:
             move.name: DepletableMove(move)
             for move in moves}
         # TODO status condition
+
+    @property
+    def name(self):
+        return self.nickname or self.species.name
 
     @property
     def stats(self):
