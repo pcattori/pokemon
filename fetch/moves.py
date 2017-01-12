@@ -2,7 +2,8 @@ from bs4 import BeautifulSoup
 import json
 import requests
 
-# TODO detect high critical hit ratio
+# TODO detect high critical hit ratio: http://bulbapedia.bulbagarden.net/wiki/Category:Moves_with_a_high_critical-hit_ratio
+# TODO priority moves: http://bulbapedia.bulbagarden.net/wiki/Priority#Generation_I
 
 def int_or_None(string):
     try:
