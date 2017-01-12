@@ -1,9 +1,5 @@
-import collections
-import itertools
 import pokemon
 import pokemon.battle
-
-options = ['Fight', 'Pokemon', 'Pack', 'Run']
 
 if __name__ == '__main__':
     red_team = pokemon.battle.Team([
