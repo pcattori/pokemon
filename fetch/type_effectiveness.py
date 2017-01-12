@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-import collections
 import json
 import requests
 import pokemon
