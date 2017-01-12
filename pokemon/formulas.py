@@ -17,7 +17,7 @@ def _load_type_effectivenesses():
             yield pokemon.TypeEffectiveness(**type_effectiveness)
 
 TYPE_EFFECTIVENESSES = _load_type_effectivenesses()
-effectiveness = {
+type_effectiveness = {
     (te.attack, te.defend): te.effectiveness
     for te in TYPE_EFFECTIVENESSES
 }
@@ -42,7 +42,7 @@ def stat_calc(base, iv, ev, level):
     base_iv_level = (base + iv) * 2 + math.floor(math.sqrt(ev) / 4)
     return math.floor(base_iv_level * level / 100) + 5
 
-def damage(pokemon, move, opponent):
+def damage(pokemon, move, opponent, critical_hit=None, luck=None):
     '''http://bulbapedia.bulbagarden.net/wiki/Damage#Damage_formula'''
     # TODO allow for critical, luck injection?
 
@@ -51,19 +51,21 @@ def damage(pokemon, move, opponent):
     if move.type_ in pokemon.species.types:
         stab = 1.5
 
-    type_effectiveness = 1
+    effectiveness = 1
     for type_ in opponent.species.types:
-        type_effectiveness *= effectiveness[(move.type_, type_)]
+        effectiveness *= type_effectiveness[(move.type_, type_)]
 
     # http://bulbapedia.bulbagarden.net/wiki/Critical_hit#In_Generation_I
     # TODO http://bulbapedia.bulbagarden.net/wiki/Category:Moves_with_a_high_critical-hit_ratio
-    critical = 1
-    if random.random() < pokemon.species.base_stats.speed / 512:
-        critical = 2
+    if critical_hit is None:
+        critical_hit = random.random() < pokemon.species.base_stats.speed / 512
+    critical = 2 if critical_hit else 1
+
+    if luck is None:
+        luck = random.uniform(0.85, 1)
 
     # modifier without `other` for 1st generation
-    luck = random.uniform(0.85, 1)
-    modifier = stab * type_effectiveness * critical * luck
+    modifier = stab * effectiveness * critical * luck
 
     # level
     level = pokemon.level
@@ -76,13 +78,13 @@ def damage(pokemon, move, opponent):
         attack = pokemon.stats.special
         defense = opponent.stats.special
     else:
+        # TODO raise ValueError? return 0?
         return None
 
     # base power
     base = move.power
 
     dmg = math.floor((((2 * level + 10) / 250) * (attack / defense) * base + 2) * modifier)
-    # TODO effectiveness and critical messages
     return Damage(
-        damage=dmg, luck=luck, critical_hit=critical == 2,
-        effectiveness=type_effectiveness)
+        damage=dmg, luck=luck, critical_hit=critical_hit,
+        effectiveness=effectiveness)
