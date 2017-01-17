@@ -17,5 +17,6 @@ class FallbackWrapper:
     def __setattr__(self, attr, value):
         if attr not in self.__dict__ and hasattr(self._fallback, attr):
             setattr(self._fallback, attr, value)
-        # default behavior
-        super().__setattr__(attr, value)
+        else:
+            # default behavior
+            super().__setattr__(attr, value)
