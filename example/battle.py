@@ -12,7 +12,7 @@ if __name__ == '__main__':
                 'tackle', 'tail whip', 'bubble', 'water gun')])])
     teams = (red_team, blue_team)
 
-    while all(not team.blacked_out() for team in teams):
+    while not any(team.blacked_out() for team in teams):
         for team in teams:
             print(f'{team.fighter.name} has {team.fighter.hp} hp')
         move_choices = []
@@ -36,3 +36,8 @@ if __name__ == '__main__':
             else:
                 print(f'{result.move_choice.target.name} now has {result.move_choice.target.hp} hp')
         print('\n==================\n')
+
+    if red_team.blacked_out():
+        print(f'Red blacked out!')
+    elif blue_team.blacked_out():
+        print(f'Blue blacked out!')
