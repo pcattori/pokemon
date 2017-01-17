@@ -17,8 +17,10 @@ def move(priority=0, effect=None, high_critical_hit_ratio=False, **kwargs):
 MoveEffect = collections.namedtuple('MoveEffect', [
     'chance', 'status_condition', 'stat', 'stages'])
 
-def move_effect(chance=1.0, **kwargs):
-    return MoveEffect(chance=chance, **kwargs)
+def move_effect(chance=1.0, status_condition=None, stat=None, stages=None, **kwargs):
+    return MoveEffect(
+        chance=chance, status_condition=status_condition, stat=stat,
+        stages=stages, **kwargs)
 
 TypeEffectiveness = collections.namedtuple('TypeEffectiveness', [
     'attack', 'defend', 'effectiveness'])
