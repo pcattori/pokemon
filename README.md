@@ -8,6 +8,7 @@ Python Pokémon API : 1st Generation Pokédex and Battle Simulation
 :zap: Batteries included: Comes bundled with JSON data for 1st Generation
 - [Pokémon Species](pokemon/data/species.json)
 - [Moves](pokemon/data/moves.json)
+    - [Supported/Unsupported moves](docs/move_support.md)
 - [Type Chart](pokemon/data/type_effectiveness.json)
 
 ## Install
