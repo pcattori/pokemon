@@ -103,6 +103,7 @@ def fight(move_choices):
 
         # send result
         if target.hp == 0:
+            yield MoveResult(move_choice, miss=False, ko=True, damage=dmg)
             # do not let KO'd opponent hit back -> return
-            return MoveResult(move_choice, miss=False, ko=True, damage=dmg)
+            return
         yield MoveResult(move_choice, miss=False, ko=False, damage=dmg)
