@@ -1,19 +1,17 @@
 import collections
 import pokemon
+import pokemon.utils as utils
 import random
 
 # http://bulbapedia.bulbagarden.net/wiki/Statistic#Stage_multipliers
 STAGE_MULTIPLIERS = (1, 1.5, 2, 2.5, 3, 3.5, 4, .25, .28, .33, .4, .5, .66)
-
-# TODO consolidate BattleStats and StatStages?
 
 BattleStats = collections.namedtuple('BattleStats', [
     'attack', 'defense', 'special', 'speed', 'accuracy', 'evasion'])
 
 class StatStages:
     def __init__(
-            self, attack=0, defense=0, special=0,
-            speed=0, accuracy=0, evasion=0):
+            self, attack=0, defense=0, special=0, speed=0, accuracy=0, evasion=0):
         self.attack = attack
         self.defense = defense
         self.special = special
@@ -21,21 +19,28 @@ class StatStages:
         self.accuracy = accuracy
         self.evasion = evasion
 
-class BattlePokemon(pokemon.Pokemon):
+MoveChoice = collections.namedtuple('MoveChoice', ['fighter', 'move', 'target'])
+
+class DeterministicMoveChoice(utils.FallbackWrapper):
+    def __init__(self, move_choice, miss):
+        super().__init__(move_choice)
+        self.miss = miss
+
+MoveResult = collections.namedtuple('MoveResult', ['move_choice', 'miss', 'ko', 'damage'])
+
+class BattlePokemon(utils.FallbackWrapper):
     def __init__(self, pokemon, stat_stages=None):
-        self.pokemon = pokemon
+        super().__init__(pokemon)
         self.stat_stages = stat_stages or StatStages()
 
     @property
     def battle_stats(self):
+        '''http://bulbapedia.bulbagarden.net/wiki/Statistic#Stage_multipliers'''
         stats = self.stats._asdict()
         battle_stats = {
             stat: stats.get(stat, 1) * STAGE_MULTIPLIERS[stage]
             for stat, stage in self.stat_stages.__dict__.items()}
-        return BattleStats(**base_stats)
-
-    def __getattr__(self, attr):
-        return getattr(self.pokemon, attr)
+        return BattleStats(**battle_stats)
 
 class Team(collections.Sequence):
     def __init__(self, members):
@@ -67,28 +72,37 @@ class Team(collections.Sequence):
     def __len__(self):
         return len(self.members)
 
-FightAction = collections.namedtuple('FightAction', ['pokemon', 'move', 'target'])
-FightActionResult = collections.namedtuple('FightActionResult', [
-    'action', 'miss', 'ko', 'damage'])
-
-def fight(fight_actions):
-    prioritized_fight_actions = sorted(
-        fight_actions,
-        key=lambda fight_action: fight_action.pokemon.stats.speed,
+def fight(move_choices):
+    # priority check
+    prioritized_move_choices = sorted(
+        move_choices,
+        key=lambda move_choice: move_choice.fighter.battle_stats.speed,
         reverse=True)
-    for fight_action in prioritized_fight_actions:
-        move = fight_action.pokemon.moves[fight_action.move]
+
+    for move_choice in prioritized_move_choices:
+        fighter, move_name, target = move_choice[:3]
+        move = fighter.moves[move_name]
+
+        # power point check
         if move.pp <= 0:
             raise ValueError(f'{move.move.name} is out of PP!')
         move.pp -= 1
-        miss = move.accuracy is not None and move.accuracy < random.random()
+
+        # accuracy check
+        miss = (
+            move.accuracy is not None and
+            move.accuracy * fighter.battle_stats.accuracy < random.random())
+        if isinstance(move_choice, DeterministicMoveChoice):
+            miss = move_choice.miss
         if miss:
-            yield FightActionResult(
-                fight_action, miss=True, ko=False, damage=None)
-        dmg = pokemon.formulas.damage(
-            fight_action.pokemon, move, fight_action.target)
-        opponent = fight_action.target
-        opponent.pokemon.hp -= dmg.damage
-        opponent.pokemon.hp = max(opponent.hp, 0)
-        yield FightActionResult(
-            fight_action, miss=False, ko=opponent.hp == 0, damage=dmg)
+            yield MoveResult(move_choice, miss=True, ko=False, damage=None)
+
+        # deal damage
+        dmg = pokemon.formulas.damage(fighter, move, target)
+        target.hp -= min(dmg.damage, target.hp)
+
+        # send result
+        if target.hp == 0:
+            # do not let KO'd opponent hit back -> return
+            return MoveResult(move_choice, miss=False, ko=True, damage=dmg)
+        yield MoveResult(move_choice, miss=False, ko=False, damage=dmg)
