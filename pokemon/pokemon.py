@@ -1,16 +1,13 @@
 import pokemon.core as pokemon
 import pokemon.formulas as formulas
-import pokemon.pokedex as pokedex
+import pokemon.utils as utils
 
-class DepletableMove:
+class DepletableMove(utils.FallbackWrapper):
     def __init__(self, move, pp=None):
-        self.move = move
+        super().__init__(move)
         if pp is None:
             pp = move.max_pp
         self.pp = pp
-
-    def __getattr__(self, attr):
-        return getattr(self.move, attr)
 
 class Pokemon:
     def __init__(self, species, level, moves=[], ivs=None, evs=None, nickname=None):
