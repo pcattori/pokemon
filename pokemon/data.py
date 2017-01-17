@@ -51,6 +51,7 @@ def move_from_json(move_json):
     move['high_critical_hit_ratio'] = move.pop('highCriticalHitRatio', False)
     effect = move.pop('effect', None)
     if effect:
+        effect['status_condition'] = effect.pop('statusCondition', None)
         move['effect'] = pokemon.move_effect(**effect)
     return pokemon.move(**move)
 
