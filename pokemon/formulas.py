@@ -4,7 +4,7 @@ import pokemon.core as pokemon
 import pokemon.data as data
 import random
 
-Damage = collections.namedtuple('Damage', [
+DamageResult = collections.namedtuple('DamageResult', [
     'damage', 'luck', 'critical_hit', 'effectiveness'])
 
 def random_ivs():
@@ -29,7 +29,6 @@ def stat_calc(base, iv, ev, level):
 
 def damage(pokemon, move, opponent, critical_hit=None, luck=None):
     '''http://bulbapedia.bulbagarden.net/wiki/Damage#Damage_formula'''
-    # TODO allow for critical, luck injection?
 
     # Same Type Attack Bonus (STAB)
     stab = 1
@@ -63,13 +62,12 @@ def damage(pokemon, move, opponent, critical_hit=None, luck=None):
         attack = pokemon.stats.special
         defense = opponent.stats.special
     else:
-        # TODO raise ValueError? return 0?
-        return None
+        raise ValueError(f"Move category '{move.category}' cannot deal direct damage")
 
     # base power
     base = move.power
 
     dmg = math.floor((((2 * level + 10) / 250) * (attack / defense) * base + 2) * modifier)
-    return Damage(
+    return DamageResult(
         damage=dmg, luck=luck, critical_hit=critical_hit,
         effectiveness=effectiveness)
