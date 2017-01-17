@@ -1,26 +1,11 @@
 import collections
-import json
 import math
-import pkg_resources
 import pokemon.core as pokemon
+import pokemon.data as data
 import random
 
 Damage = collections.namedtuple('Damage', [
     'damage', 'luck', 'critical_hit', 'effectiveness'])
-
-def _load_type_effectivenesses():
-    type_effectiveness_json = pkg_resources.resource_filename(
-        'pokemon', 'data/type_effectiveness.json')
-    with open(type_effectiveness_json) as f:
-        for line in f:
-            type_effectiveness = json.loads(line)
-            yield pokemon.TypeEffectiveness(**type_effectiveness)
-
-TYPE_EFFECTIVENESSES = _load_type_effectivenesses()
-type_effectiveness = {
-    (te.attack, te.defend): te.effectiveness
-    for te in TYPE_EFFECTIVENESSES
-}
 
 def random_ivs():
     '''http://bulbapedia.bulbagarden.net/wiki/Individual_values#Generation_I_and_II'''
@@ -53,7 +38,7 @@ def damage(pokemon, move, opponent, critical_hit=None, luck=None):
 
     effectiveness = 1
     for type_ in opponent.species.types:
-        effectiveness *= type_effectiveness[(move.type_, type_)]
+        effectiveness *= data.TYPE_CHART[move.type_][type_]
 
     # http://bulbapedia.bulbagarden.net/wiki/Critical_hit#In_Generation_I
     # TODO http://bulbapedia.bulbagarden.net/wiki/Category:Moves_with_a_high_critical-hit_ratio
