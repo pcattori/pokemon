@@ -1,4 +1,5 @@
 import pokemon
+import pokemon.battle
 import unittest
 
 # NOTE: this is a generation 1 library so:
@@ -21,6 +22,8 @@ glaceon = pokemon.Pokemon(
 glaceon._stats = pokemon.Stats(
     hp=201, attack=123, defense=181,
     special=glaceon.stats.special, speed=glaceon.stats.speed)
+# suit up for battle
+glaceon = pokemon.battle.Fighter(glaceon)
 
 # again, have to manually construct garchomp since its not gen1
 garchomp = pokemon.Pokemon(
@@ -33,6 +36,8 @@ garchomp = pokemon.Pokemon(
 garchomp._stats = pokemon.Stats(
     hp=270, attack=210, defense=163,
     special=garchomp.stats.special, speed=garchomp.stats.speed)
+# suit up for battle
+garchomp = pokemon.battle.Fighter(garchomp)
 
 class BulbapediaDamageTest(unittest.TestCase):
     '''http://bulbapedia.bulbagarden.net/wiki/Damage#Example'''
