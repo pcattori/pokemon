@@ -10,6 +10,8 @@ setup(
     packages=['pokemon', 'fetch'],
     package_dir={'pokemon': 'pokemon'},
     package_data={'pokemon': ['data/*.json']},
+    install_requires=[
+        'maps==3.0.1'],
     extras_require={'fetch': [
         'beautifulsoup4==4.5.1',
         'requests==2.12.4']}

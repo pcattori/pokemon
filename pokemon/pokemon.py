@@ -1,13 +1,10 @@
-import pokemon.core as pokemon
+import maps
+import pokemon.core as core
+import pokemon.data as data
 import pokemon.formulas as formulas
 import pokemon.utils as utils
 
-class DepletableMove(utils.FallbackWrapper):
-    def __init__(self, move, pp=None):
-        super().__init__(move)
-        if pp is None:
-            pp = move.max_pp
-        self.pp = pp
+DepletableMove = maps.namedfixedkey('DepletableMove', data.Move._fields + ('pp',))
 
 class Pokemon:
     def __init__(self, species, level, moves=[], ivs=None, evs=None, nickname=None):
@@ -16,14 +13,14 @@ class Pokemon:
         self.level = level
 
         self.ivs = ivs or formulas.random_ivs()
-        self.evs = evs or pokemon.Stats(0, 0, 0, 0, 0)
+        self.evs = evs or core.Stats(*(5 * [0]))
 
         self._stats = None
         self.hp = self.stats.hp # start at full hp
         self.moves = {
-            move.name: DepletableMove(move)
+            move.name: DepletableMove(pp=move.max_pp, **move)
             for move in moves}
-        # TODO status condition
+        self.status_condition = core.StatusCondition(None, None)
 
     @property
     def name(self):
@@ -37,5 +34,5 @@ class Pokemon:
             others = tuple(
                 formulas.stat_calc(base, iv, ev, self.level)
                 for base, iv, ev in values)
-            self._stats = pokemon.Stats(hp, *others)
+            self._stats = core.Stats(hp, *others)
         return self._stats

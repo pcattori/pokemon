@@ -1,4 +1,8 @@
-from pokemon.core import move, move_effect, Move, Species, Stats, TypeEffectiveness
-from pokemon.data import MOVEDEX, POKEDEX, TYPE_CHART
+from pokemon.data import MOVEDEX, POKEDEX, TYPE_CHART, find_move, find_species
 from pokemon.pokemon import Pokemon
-from pokemon.utils import find_move, find_species
+
+def pokemon(species_name, level, moves, ivs=None, evs=None, nickname=None):
+    return Pokemon(
+        find_species(species_name), level,
+        [find_move(move_name) for move_name in moves],
+        ivs=ivs, evs=evs, nickname=nickname)
