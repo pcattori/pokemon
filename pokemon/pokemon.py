@@ -20,7 +20,7 @@ class Pokemon:
         self.moves = {
             move.name: DepletableMove(pp=move.max_pp, **move)
             for move in moves}
-        self.status_condition = core.StatusCondition(None, None)
+        self.status_condition = None
 
     @property
     def name(self):

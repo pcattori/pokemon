@@ -1,5 +1,6 @@
 import collections
 import math
+import numpy as np
 import pokemon.core as core
 import pokemon.data as data
 import random
@@ -27,9 +28,9 @@ def stat_calc(base, iv, ev, level):
     base_iv_level = (base + iv) * 2 + math.floor(math.sqrt(ev) / 4)
     return math.floor(base_iv_level * level / 100) + 5
 
-# TODO should not depend on battle
 def damage(fighter, move, target, critical_hit=None, luck=None):
     '''http://bulbapedia.bulbagarden.net/wiki/Damage#Damage_formula'''
+    # TODO should not depend on battle
     import pokemon.battle.fighter as battlefighter
     if not isinstance(fighter, battlefighter.Fighter):
         fighter = battlefighter.Fighter(fighter)
@@ -93,3 +94,18 @@ def accuracy_check(fighter, move, target):
 # http://bulbapedia.bulbagarden.net/wiki/Statistic#Stage_multipliers
 STAGE_MULTIPLIERS = (1, 1.5, 2, 2.5, 3, 3.5, 4, .25, .28, .33, .4, .5, .66)
 
+def volitile_status_condition_turns(status_condition):
+    '''http://bulbapedia.bulbagarden.net/wiki/Status_condition#Generation_I'''
+    if status_condition == 'bound':
+        return np.random.choice(range(2, 6), p=[.375, .375, .125, .125])
+    elif status_condition == 'confusion':
+        return random.randint(1, 4)
+    elif status_condition == 'flinch':
+        return 1
+    elif status_condition == 'leech seed':
+        return None
+    raise ValueError(f'Unrecognized status condition: {status_condition!r}')
+
+def sleep_turns():
+    '''http://bulbapedia.bulbagarden.net/wiki/Sleep_(status_condition)#Generation_I'''
+    return random.randint(1, 7)

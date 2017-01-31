@@ -5,7 +5,7 @@ class BattleTeam(collections.abc.Sequence):
     def __init__(self, members):
         self.members = tuple(members)
         self.fighter_index = 0
-        self.fighter = fighter.Fighter(self.members[self.fighter_index])
+        self.fighter = fighter.Fighter(self.members[self.fighter_index], self)
 
     @property
     def reserves(self):
@@ -23,7 +23,7 @@ class BattleTeam(collections.abc.Sequence):
         if member.hp < 0:
             raise ValueError(f'{member.name} is fainted!')
         self.fighter_index = member_index
-        self.fighter = fighter.Fighter(self.members[self.fighter_index])
+        self.fighter = fighter.Fighter(self.members[self.fighter_index], self)
 
     def __getitem__(self, index):
         return self.members[index]
