@@ -93,5 +93,5 @@ def find_species(species_name):
     return POKEDEX.by_name(species_name)
 
 def find_move(move_name):
-    return MOVEDEX.by_name(move_name)
+    return MOVEDEX[move_name]
 

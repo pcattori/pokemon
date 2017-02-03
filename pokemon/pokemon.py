@@ -7,7 +7,9 @@ import pokemon.utils as utils
 DepletableMove = maps.namedfixedkey('DepletableMove', data.Move._fields + ('pp',))
 
 class Pokemon:
-    def __init__(self, species, level, moves=[], ivs=None, evs=None, nickname=None):
+    def __init__(
+            self, species, level, moves=[], ivs=None, evs=None, nickname=None,
+            status_condition=None):
         self.species = species
         self.nickname = nickname
         self.level = level
@@ -15,12 +17,11 @@ class Pokemon:
         self.ivs = ivs or formulas.random_ivs()
         self.evs = evs or core.Stats(*(5 * [0]))
 
-        self._stats = None
         self.hp = self.stats.hp # start at full hp
         self.moves = {
             move.name: DepletableMove(pp=move.max_pp, **move)
             for move in moves}
-        self.status_condition = None
+        self.status_condition = status_condition
 
     @property
     def name(self):
@@ -28,11 +29,20 @@ class Pokemon:
 
     @property
     def stats(self):
-        if self._stats is None:
-            values = zip(self.species.base_stats, self.ivs, self.evs)
-            hp = formulas.hp_calc(*(next(values) + (self.level,)))
-            others = tuple(
-                formulas.stat_calc(base, iv, ev, self.level)
-                for base, iv, ev in values)
-            self._stats = core.Stats(hp, *others)
-        return self._stats
+        values = zip(self.species.base_stats, self.ivs, self.evs)
+        hp = formulas.hp_calc(*(next(values) + (self.level,)))
+        others = tuple(
+            formulas.stat_calc(base, iv, ev, self.level)
+            for base, iv, ev in values)
+        return core.Stats(hp, *others)
+
+    def __deepcopy__(self, _):
+        return type(self)(
+            species=self.species,
+            nickname=self.nickname,
+            level=self.level,
+            ivs=self.ivs,
+            evs=self.evs,
+            hp=self.hp,
+            moves={move.name: DepletableMove(**move) for move in self.moves},
+            status_condition = self.status_condition)

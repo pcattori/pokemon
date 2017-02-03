@@ -1,5 +1,7 @@
 import pokemon
-import pokemon.battle.battle as pokebattle
+from pokemon.battle.battle import Battle, MoveChoice
+from pokemon.battle.events import commentate_event
+import time
 
 if __name__ == '__main__':
     red_team = [
@@ -10,7 +12,7 @@ if __name__ == '__main__':
             'tackle', 'tail whip', 'bubble', 'water gun'])]
     teams = (red_team, blue_team)
 
-    battle = pokebattle.Battle(teams)
+    battle = Battle(teams)
 
     while not battle.ended:
         for team in battle.teams:
@@ -21,8 +23,10 @@ if __name__ == '__main__':
             print(f'What will {team.fighter.name} do?')
             print(*list(team.fighter.moves.keys()), sep='\n')
             move_name = input('>> ')
-            move_choices.append(pokebattle.MoveChoice(
+            move_choices.append(MoveChoice(
                 fighter=team.fighter, move_name=move_name))
         turn_summary = list(battle.next_turn(move_choices))
-        print(*turn_summary, sep='\n')
+        for event in turn_summary:
+            print(*(commentate_event(battle.teams, event)), sep='\n')
+            input('')
 

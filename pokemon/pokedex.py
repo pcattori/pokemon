@@ -1,6 +1,6 @@
-import collections
+import collections.abc
 
-class Pokedex(collections.Sequence):
+class Pokedex(collections.abc.Sequence):
     def __init__(self, species):
         self.species = sorted(species, key=lambda s: s.national_pokedex_number)
         self._by_name = {species.name: species for species in self.species}
@@ -8,7 +8,7 @@ class Pokedex(collections.Sequence):
     def by_name(self, name):
         return self._by_name[name]
 
-    def by_npn(self, national_pokedex_number):
+    def by_national_pokedex_number(self, national_pokedex_number):
         '''National Pokédex Number (NPN)'''
         return self[national_pokedex_number - 1]
 
@@ -18,16 +18,12 @@ class Pokedex(collections.Sequence):
     def __len__(self):
         return len(self.species)
 
-class Movedex(collections.Collection):
+class Movedex(collections.abc.Mapping):
     def __init__(self, moves):
-        self.moves = moves
-        self._by_name = {move.name: move for move in self.moves}
+        self.moves = {move.name: move for move in moves}
 
-    def by_name(self, name):
-        return self._by_name[name]
-
-    def __contains__(self, item):
-        return item in self.moves
+    def __getitem__(self, name):
+        return self.moves[name]
 
     def __iter__(self):
         return iter(self.moves)
